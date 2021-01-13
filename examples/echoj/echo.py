@@ -20,10 +20,8 @@ def cycleWork():
 
 
 def main():
-	with open("/tmp/123.log", "w") as fp:
-		while True:
-			o = cycleWork()
-			fp.write(repr(o) + "\n")
+	while True:
+		cycleWork()
 	return 0
 
 
