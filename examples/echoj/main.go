@@ -20,11 +20,12 @@ func main() {
 		log.Print("Usage: ./echoj /bin/cat ...")
 		return
 	}
-	cmdArgs := os.Args[1:]
+	exePath := os.Args[1]
+	cmdArgs := os.Args[2:]
 	dataBuf := helloData{
 		CmdArgs: []string{"Hello", "World"},
 	}
-	cmd := commandjsonio.NewCommandJSONReaderWriter(context.Background(), cmdArgs, nil, "")
+	cmd := commandjsonio.NewCommandJSONReaderWriter(context.Background(), exePath, cmdArgs, nil, "")
 	if err := cmd.Start(); nil != err {
 		log.Fatalf("ERROR: start failed: %v", err)
 		return

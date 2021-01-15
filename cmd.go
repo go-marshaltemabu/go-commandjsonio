@@ -7,12 +7,9 @@ import (
 	"os/exec"
 )
 
-func setupExecCmd(ctx context.Context, cmdArgs, cmdEnvs []string, workDir string) (cmd *exec.Cmd) {
-	cmd = &exec.Cmd{
-		Path: cmdArgs[0],
-		Args: cmdArgs,
-		Dir:  workDir,
-	}
+func setupExecCmd(ctx context.Context, exePath string, cmdArgs, cmdEnvs []string, workDir string) (cmd *exec.Cmd) {
+	cmd = exec.CommandContext(ctx, exePath, cmdArgs...)
+	cmd.Dir = workDir
 	if len(cmdEnvs) > 0 {
 		cmd.Env = cmdEnvs
 	}
@@ -30,8 +27,8 @@ type CmdJSONReaderWriter struct {
 }
 
 // NewCommandJSONReaderWriter create new instance of CmdJSONReaderWriter.
-func NewCommandJSONReaderWriter(ctx context.Context, cmdArgs, cmdEnvs []string, workDir string) (cmd *CmdJSONReaderWriter) {
-	cmdInst := setupExecCmd(ctx, cmdArgs, cmdEnvs, workDir)
+func NewCommandJSONReaderWriter(ctx context.Context, exePath string, cmdArgs, cmdEnvs []string, workDir string) (cmd *CmdJSONReaderWriter) {
+	cmdInst := setupExecCmd(ctx, exePath, cmdArgs, cmdEnvs, workDir)
 	cmd = &CmdJSONReaderWriter{
 		Cmd: cmdInst,
 	}

@@ -12,7 +12,7 @@ const DefaultRunCommandJSONTimeout = time.Second * 10
 
 // RunCommandJSON run given command and send JSON encoded inputRef into STDIN of command.
 // Output of STDOUT will be decode as JSON and put into outputRef.
-func RunCommandJSON(ctx context.Context, cmdArgs, cmdEnvs []string, workDir string, timeoutDuration time.Duration, inputRef, outputRef interface{}) (err error) {
+func RunCommandJSON(ctx context.Context, exePath string, cmdArgs, cmdEnvs []string, workDir string, timeoutDuration time.Duration, inputRef, outputRef interface{}) (err error) {
 	b, err := json.Marshal(inputRef)
 	if nil != err {
 		err = &ErrEncodeInput{
@@ -29,7 +29,7 @@ func RunCommandJSON(ctx context.Context, cmdArgs, cmdEnvs []string, workDir stri
 	}
 	ctx, cancel := context.WithTimeout(ctx, timeoutDuration)
 	defer cancel()
-	cmdInst := setupExecCmd(ctx, cmdArgs, cmdEnvs, workDir)
+	cmdInst := setupExecCmd(ctx, exePath, cmdArgs, cmdEnvs, workDir)
 	cmdInst.Stdin = stdinReader
 	stdoutPipe, err := cmdInst.StdoutPipe()
 	if err != nil {
